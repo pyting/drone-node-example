@@ -24,7 +24,7 @@ steps:
       # debug: true
       path_style: true
       mount:
-        - 'node_modules'
+        - node_modules
 
   - name: build
     image: node:8
@@ -36,28 +36,28 @@ steps:
       - npm run build
       - cd ./dist && tar czvf dist.tar.gz ./*
 
-  - name: publish
-    image: plugins/docker:latest
-    settings:
-      registry: harbor.qsbp.io:80
-      insecure: true
-      username:
-        from_secret: docker_username
-      password:
-        from_secret: docker_password
-      repo: harbor.qsbp.io:80/qsbp/f-channel-provider
-      tags: ${DRONE_TAG}
+  # - name: publish
+  #   image: plugins/docker:latest
+  #   settings:
+  #     registry: harbor.qsbp.io:80
+  #     insecure: true
+  #     username:
+  #       from_secret: docker_username
+  #     password:
+  #       from_secret: docker_password
+  #     repo: harbor.qsbp.io:80/qsbp/f-channel-provider
+  #     tags: ${DRONE_TAG}
 
-  - name: deploy
-    image: danielgormly/drone-plugin-kube
-    settings:
-      template: deployment.yaml
-      namespace: dev
-      token:
-        from_secret: kube_token
-      ca:
-        from_secret: kube_ca
-      server: https://192.168.1.68:6443
+  # - name: deploy
+  #   image: danielgormly/drone-plugin-kube
+  #   settings:
+  #     template: deployment.yaml
+  #     namespace: dev
+  #     token:
+  #       from_secret: kube_token
+  #     ca:
+  #       from_secret: kube_ca
+  #     server: https://192.168.1.68:6443
       
   - name: rebuild-cache
     image: meltwater/drone-cache:v1
@@ -74,4 +74,4 @@ steps:
       # debug: true
       path_style: true
       mount:
-        - 'node_modules'
+        - node_modules
